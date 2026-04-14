@@ -512,6 +512,107 @@ body{
 }
 .lib-empty .emoji{font-size:44px;display:block;margin-bottom:12px;}
 .lib-empty p{font-size:14px;line-height:1.6;}
+
+/* Library section cards — Apple Music style */
+.lib-sec-card{
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  user-select:none;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 20px rgba(0,0,0,.18);
+  position:relative;
+  margin-bottom:4px;
+}
+.lib-sec-card:active{transform:scale(.97);}
+
+/* 2×2 art collage */
+.lib-sec-art{
+  width:100%;aspect-ratio:1.9/1;
+  display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  background:var(--bg3);
+  position:relative;
+}
+.lib-sec-art img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.lib-sec-art-placeholder{
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg3);
+}
+.lib-sec-art-placeholder svg{
+  width:28px;height:28px;stroke:var(--text3);fill:none;
+  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
+}
+/* gradient overlay so bottom text is readable */
+.lib-sec-art::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.72) 100%);
+  pointer-events:none;
+}
+/* title bar overlaid on artwork */
+.lib-sec-footer{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:14px 16px 16px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  z-index:2;
+}
+.lib-sec-info{min-width:0;}
+.lib-sec-title{
+  font-size:17px;font-weight:700;color:#fff;
+  letter-spacing:-.3px;line-height:1.2;
+  text-shadow:0 1px 6px rgba(0,0,0,.4);
+}
+.lib-sec-meta{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px;}
+.lib-sec-play-circle{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1.5px solid rgba(255,255,255,.35);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-left:10px;
+  transition:background .15s,transform .12s;
+}
+.lib-sec-play-circle:active{transform:scale(.9);}
+.lib-sec-play-circle svg{
+  width:16px;height:16px;stroke:#fff;fill:#fff;
+  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
+  margin-left:2px; /* optical center for play icon */
+}
+
+/* expanded song list */
+.lib-sec-songs{
+  background:var(--bg2);
+  border-radius:0 0 18px 18px;
+  overflow:hidden;
+  margin-top:-18px;
+  padding-top:18px;
+  margin-bottom:16px;
+  animation:slideDown .22s cubic-bezier(.32,.72,0,1);
+}
+.lib-sec-shuffle-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px 10px;
+  border-bottom:1px solid var(--border);
+}
+.lib-sec-shuffle-bar-title{
+  font-size:13px;font-weight:600;color:var(--text3);letter-spacing:.3px;
+}
+.lib-sec-shuffle-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:20px;padding:7px 14px;
+  font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
+  transition:opacity .15s;
+}
+.lib-sec-shuffle-btn:active{opacity:.8;}
+.lib-sec-shuffle-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.lib-sec-songs .song-row{border-radius:0;border-bottom:1px solid var(--border);}
+.lib-sec-songs .song-row:last-child{border-bottom:none;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+
 .delete-btn{
   width:32px;height:32px;
   border-radius:50%;
@@ -932,7 +1033,10 @@ body{
       </div>
 
       <!-- RECENT -->
-      <div class="section-title">Recently played</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0;">
+        <div class="section-title" style="margin-bottom:0;">Recently played</div>
+        <button id="recent-play-all-btn" onclick="playAllRecent()" style="display:none;background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--accent);font-family:inherit;padding:4px 0;letter-spacing:.3px;">Play all</button>
+      </div>
       <div id="recent-list">
         <div class="recent-empty">
           <span class="emoji">🎵</span>
@@ -2294,10 +2398,13 @@ async function renderRecent() {
   const hash = items.map(i => i.videoId + i.playedAt).join(',') + (currentSong?.videoId || '');
   if (hash === _recentHash) return;
   _recentHash = hash;
+  const playAllBtn = document.getElementById('recent-play-all-btn');
   if (!items.length) {
+    if (playAllBtn) playAllBtn.style.display = 'none';
     container.innerHTML = `<div class="recent-empty"><span class="emoji">🎵</span>Play a song to see it here</div>`;
     return;
   }
+  if (playAllBtn) playAllBtn.style.display = '';
   items.sort((a, b) => b.playedAt - a.playedAt);
   container.innerHTML = '';
   items.slice(0, 10).forEach(item => {
@@ -2322,6 +2429,21 @@ async function renderRecent() {
     div.insertBefore(qBtn, div.querySelector('.song-action'));
     container.appendChild(div);
   });
+}
+
+async function playAllRecent() {
+  const items = await dbGetAll('recent');
+  if (!items.length) return;
+  items.sort((a, b) => b.playedAt - a.playedAt);
+  const songs = items.slice(0, 10).map(i => ({
+    videoId: i.videoId, title: i.title, artist: i.artist, thumbnail: i.thumbnail,
+  }));
+  // Play first, queue the rest
+  const [first, ...rest] = songs;
+  queue.unshift(...rest);
+  renderQueue();
+  playFromRecent(first);
+  toast(`Playing ${songs.length} recent songs`);
 }
 
 async function playFromRecent(item) {
@@ -2349,54 +2471,156 @@ function filterLibrary(val) {
   renderLibrary();
 }
 
+let _libOpenSection = null; // 'saved' | 'auto' | null
+
 async function renderLibrary() {
   const container = document.getElementById('library-list');
   const countEl = document.getElementById('lib-count');
-  const items = await dbGetAll('songs');
-  const saved = items.filter(i => i.savedAt);
-  const hash = saved.map(i => i.videoId + i.savedAt).join(',') + (currentSong?.videoId || '') + _libFilter;
+  const all = await dbGetAll('songs');
+  const saved = all.filter(i => i.savedAt && i.blob);
+  const auto  = all.filter(i => i.autoSaved && !i.savedAt && i.blob);
+
+  const hash = all.map(i => i.videoId + (i.savedAt||'') + (i.autoSaved||'')).join(',')
+    + (currentSong?.videoId || '') + _libFilter + (_libOpenSection || '');
   if (hash === _libraryHash) return;
   _libraryHash = hash;
-  countEl.textContent = saved.length + ' song' + (saved.length !== 1 ? 's' : '');
 
-  if (!saved.length) {
+  const total = saved.length + auto.length;
+  countEl.textContent = total + ' song' + (total !== 1 ? 's' : '');
+
+  if (!total) {
     container.innerHTML = `<div class="lib-empty"><span class="emoji">📥</span><p>Songs you save will appear here<br/>and play without internet</p></div>`;
     return;
   }
-  saved.sort((a, b) => b.savedAt - a.savedAt);
 
-  const visible = _libFilter
-    ? saved.filter(i => (i.title || '').toLowerCase().includes(_libFilter) || (i.artist || '').toLowerCase().includes(_libFilter))
-    : saved;
-
-  if (!visible.length) {
-    container.innerHTML = `<div class="lib-no-results">No saved songs match "${escHtml(_libFilter)}"</div>`;
-    return;
-  }
   container.innerHTML = '';
-  visible.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'song-row' + (currentSong?.videoId === item.videoId ? ' playing' : '');
-    div.dataset.videoid = item.videoId;
-    div.innerHTML = `
-      <img class="song-thumb" src="${item.thumbnail || ''}" onerror="this.style.display='none'" loading="lazy"/>
-      <div class="song-info">
-        <div class="song-title">${escHtml(item.title)}</div>
-        <div class="song-meta">${escHtml(item.artist || '')}</div>
-        <div class="cache-pill"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Offline</div>
-      </div>
-      <button class="delete-btn" onclick="deleteSong('${item.videoId}', event)">
-        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-      </button>`;
-    div.onclick = (e) => { if (!e.target.closest('.delete-btn') && !e.target.closest('.q-add-btn')) playFromLibrary(item); };
-    const qBtn = document.createElement('button');
-    qBtn.className = 'q-add-btn';
-    qBtn.title = 'Add to queue';
-    qBtn.innerHTML = `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
-    qBtn.onclick = e => { e.stopPropagation(); addToQueue({ videoId: item.videoId, title: item.title, artist: item.artist, thumbnail: item.thumbnail }); };
-    div.insertBefore(qBtn, div.querySelector('.delete-btn'));
-    container.appendChild(div);
-  });
+
+  function buildSongRows(songs, canDelete) {
+    const filter = _libFilter;
+    const visible = filter
+      ? songs.filter(i => (i.title||'').toLowerCase().includes(filter) || (i.artist||'').toLowerCase().includes(filter))
+      : songs;
+    if (!visible.length) {
+      const empty = document.createElement('div');
+      empty.className = 'lib-no-results';
+      empty.textContent = filter ? `No songs match "${filter}"` : 'No songs here';
+      return [empty];
+    }
+    return visible.map(item => {
+      const div = document.createElement('div');
+      div.className = 'song-row' + (currentSong?.videoId === item.videoId ? ' playing' : '');
+      div.dataset.videoid = item.videoId;
+      div.innerHTML = `
+        <img class="song-thumb" src="${item.thumbnail || ''}" onerror="this.style.display='none'" loading="lazy"/>
+        <div class="song-info">
+          <div class="song-title">${escHtml(item.title)}</div>
+          <div class="song-meta">${escHtml(item.artist || '')}</div>
+          <div class="cache-pill"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Offline</div>
+        </div>
+        ${canDelete ? `<button class="delete-btn" onclick="deleteSong('${item.videoId}', event)"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>` : ''}`;
+      div.onclick = (e) => { if (!e.target.closest('.delete-btn') && !e.target.closest('.q-add-btn')) playFromLibrary(item); };
+      const qBtn = document.createElement('button');
+      qBtn.className = 'q-add-btn';
+      qBtn.title = 'Add to queue';
+      qBtn.innerHTML = `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+      qBtn.onclick = e => { e.stopPropagation(); addToQueue({ videoId: item.videoId, title: item.title, artist: item.artist, thumbnail: item.thumbnail }); };
+      if (canDelete) div.insertBefore(qBtn, div.querySelector('.delete-btn'));
+      else div.appendChild(qBtn);
+      return div;
+    });
+  }
+
+  function buildArtCollage(songs) {
+    const thumbs = [...new Set(songs.map(s => s.thumbnail).filter(Boolean))].slice(0, 4);
+    const placeholder = `<div class="lib-sec-art-placeholder"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>`;
+    const cells = [];
+    for (let i = 0; i < 4; i++) {
+      cells.push(thumbs[i]
+        ? `<img src="${thumbs[i]}" onerror="this.outerHTML='${placeholder.replace(/'/g,"\\'")}'" loading="lazy"/>`
+        : placeholder);
+    }
+    return cells.join('');
+  }
+
+  function buildSection({ id, title, subtitle, songs, canDelete }) {
+    const isOpen = _libOpenSection === id;
+    const sizeMB = songs.reduce((s, i) => s + (i.blobSize || 0), 0);
+    const meta = songs.length + ' song' + (songs.length !== 1 ? 's' : '')
+      + (sizeMB ? ' · ' + (sizeMB / (1024 * 1024)).toFixed(1) + ' MB' : '');
+
+    const card = document.createElement('div');
+    card.className = 'lib-sec-card';
+    card.innerHTML = `
+      <div class="lib-sec-art">${buildArtCollage(songs)}</div>
+      <div class="lib-sec-footer">
+        <div class="lib-sec-info">
+          <div class="lib-sec-title">${title}</div>
+          <div class="lib-sec-meta">${meta}</div>
+        </div>
+        <div class="lib-sec-play-circle" id="lib-sec-play-${id}">
+          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+      </div>`;
+
+    // Play circle taps → shuffle immediately, don't toggle expand
+    card.querySelector('.lib-sec-play-circle').onclick = (e) => {
+      e.stopPropagation();
+      playLibSection(songs);
+    };
+    // Card tap → toggle expanded song list
+    card.onclick = () => {
+      _libOpenSection = isOpen ? null : id;
+      _libraryHash = null;
+      renderLibrary();
+    };
+    container.appendChild(card);
+
+    if (isOpen) {
+      const wrap = document.createElement('div');
+      wrap.className = 'lib-sec-songs';
+
+      const bar = document.createElement('div');
+      bar.className = 'lib-sec-shuffle-bar';
+      bar.innerHTML = `
+        <span class="lib-sec-shuffle-bar-title">${songs.length} SONGS</span>
+        <button class="lib-sec-shuffle-btn">
+          <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+          Shuffle
+        </button>`;
+      bar.querySelector('.lib-sec-shuffle-btn').onclick = (e) => { e.stopPropagation(); playLibSection(songs); };
+      wrap.appendChild(bar);
+
+      buildSongRows(songs, canDelete).forEach(el => wrap.appendChild(el));
+      container.appendChild(wrap);
+    }
+  }
+
+  saved.sort((a, b) => b.savedAt - a.savedAt);
+  auto.sort((a, b) => (b.cachedAt || 0) - (a.cachedAt || 0));
+
+  if (saved.length) {
+    buildSection({ id: 'saved', title: 'Saved Songs', songs: saved, canDelete: true });
+  }
+  if (auto.length) {
+    buildSection({ id: 'auto', title: 'Auto Cached', songs: auto, canDelete: false });
+  }
+}
+
+function playLibSection(songs) {
+  if (!songs.length) return;
+  // Fisher-Yates shuffle
+  const shuffled = [...songs];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  shuffleOn = true;
+  document.getElementById('fp-shuffle-btn').classList.add('fp-active');
+  const [first, ...rest] = shuffled;
+  queue.unshift(...rest.map(i => ({ videoId: i.videoId, title: i.title, artist: i.artist, thumbnail: i.thumbnail })));
+  renderQueue();
+  playFromLibrary(first);
+  toast(`Shuffling ${songs.length} songs`);
 }
 
 async function playFromLibrary(item) {
@@ -2415,6 +2639,7 @@ async function deleteSong(videoId, e) {
   // keep recent entry, just remove blob+savedAt
   await dbPut('songs', { ...item, blob: null, savedAt: null });
   if (currentSong?.videoId === videoId) updateSaveBtn(false);
+  _libraryHash = null;
   renderLibrary();
   toast('Removed from library');
 }
