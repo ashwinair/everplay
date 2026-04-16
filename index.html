@@ -478,7 +478,7 @@ body{
 /* LIBRARY TAB */
 .lib-header{
   display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 .lib-search-wrap{
   position:relative;margin-bottom:14px;
@@ -513,105 +513,40 @@ body{
 .lib-empty .emoji{font-size:44px;display:block;margin-bottom:12px;}
 .lib-empty p{font-size:14px;line-height:1.6;}
 
-/* Library section cards — Apple Music style */
-.lib-sec-card{
-  border-radius:18px;
-  overflow:hidden;
-  cursor:pointer;
-  user-select:none;
-  transition:transform .15s,box-shadow .15s;
-  box-shadow:0 4px 20px rgba(0,0,0,.18);
-  position:relative;
+/* Library flat list */
+.lib-actions-bar{
+  display:flex;align-items:center;justify-content:space-between;
   margin-bottom:4px;
 }
-.lib-sec-card:active{transform:scale(.97);}
-
-/* 2×2 art collage */
-.lib-sec-art{
-  width:100%;aspect-ratio:1.9/1;
-  display:grid;grid-template-columns:1fr 1fr;
-  grid-template-rows:1fr 1fr;
-  background:var(--bg3);
-  position:relative;
+.lib-section-label{
+  font-size:11px;font-weight:600;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.6px;
 }
-.lib-sec-art img{
-  width:100%;height:100%;object-fit:cover;display:block;
-}
-.lib-sec-art-placeholder{
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bg3);
-}
-.lib-sec-art-placeholder svg{
-  width:28px;height:28px;stroke:var(--text3);fill:none;
-  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
-}
-/* gradient overlay so bottom text is readable */
-.lib-sec-art::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.72) 100%);
-  pointer-events:none;
-}
-/* title bar overlaid on artwork */
-.lib-sec-footer{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:14px 16px 16px;
-  display:flex;align-items:flex-end;justify-content:space-between;
-  z-index:2;
-}
-.lib-sec-info{min-width:0;}
-.lib-sec-title{
-  font-size:17px;font-weight:700;color:#fff;
-  letter-spacing:-.3px;line-height:1.2;
-  text-shadow:0 1px 6px rgba(0,0,0,.4);
-}
-.lib-sec-meta{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px;}
-.lib-sec-play-circle{
-  width:40px;height:40px;border-radius:50%;
-  background:rgba(255,255,255,.2);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1.5px solid rgba(255,255,255,.35);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-left:10px;
-  transition:background .15s,transform .12s;
-}
-.lib-sec-play-circle:active{transform:scale(.9);}
-.lib-sec-play-circle svg{
-  width:16px;height:16px;stroke:#fff;fill:#fff;
-  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
-  margin-left:2px; /* optical center for play icon */
-}
-
-/* expanded song list */
-.lib-sec-songs{
-  background:var(--bg2);
-  border-radius:0 0 18px 18px;
-  overflow:hidden;
-  margin-top:-18px;
-  padding-top:18px;
-  margin-bottom:16px;
-  animation:slideDown .22s cubic-bezier(.32,.72,0,1);
-}
-.lib-sec-shuffle-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px 10px;
-  border-bottom:1px solid var(--border);
-}
-.lib-sec-shuffle-bar-title{
-  font-size:13px;font-weight:600;color:var(--text3);letter-spacing:.3px;
-}
-.lib-sec-shuffle-btn{
+.lib-shuffle-btn{
   display:flex;align-items:center;gap:6px;
   background:var(--accent);color:#fff;
   border:none;border-radius:20px;padding:7px 14px;
   font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
   transition:opacity .15s;
 }
-.lib-sec-shuffle-btn:active{opacity:.8;}
-.lib-sec-shuffle-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
-.lib-sec-songs .song-row{border-radius:0;border-bottom:1px solid var(--border);}
-.lib-sec-songs .song-row:last-child{border-bottom:none;}
-@keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+.lib-shuffle-btn:active{opacity:.8;}
+.lib-shuffle-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.lib-song-list{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin-bottom:16px;
+}
+.lib-song-list .song-row{border-radius:0;border-bottom:1px solid var(--border);}
+.lib-song-list .song-row:last-child{border-bottom:none;}
+.lib-auto-badge{
+  font-size:10px;font-weight:600;color:var(--text3);
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;padding:2px 5px;
+  display:inline-block;margin-top:3px;
+  line-height:1.4;
+}
 
 .delete-btn{
   width:32px;height:32px;
@@ -985,17 +920,6 @@ body{
 .fp-sec.fp-active .fp-sleep-badge{display:block;}
 
 /* CACHE PROGRESS */
-.cache-pill{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(255,77,0,0.1);
-  color:var(--accent);
-  border-radius:20px;
-  padding:3px 8px;
-  font-size:11px;
-  font-weight:500;
-  margin-top:4px;
-}
-.cache-pill svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;}
 </style>
 </head>
 <body>
@@ -1278,6 +1202,10 @@ body{
         <svg viewBox="0 0 24 24"><path d="M2 12s3-6 10-6 10 6 10 6"/><path d="M2 12s3 6 10 6 10-6 10-6"/><circle cx="12" cy="12" r="2"/></svg>
         Crossfade
       </button>
+      <button class="fp-sec" id="fp-dj-btn" onclick="toggleDjMode()" title="DJ Mode">
+        <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        DJ
+      </button>
       <button class="fp-sec" id="fp-sleep-btn" onclick="cycleSleepTimer()" title="Sleep timer">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
         <span class="fp-sleep-badge" id="fp-sleep-badge"></span>
@@ -1319,7 +1247,7 @@ body{
 <div id="toast"></div>
 
 <!-- HIDDEN AUDIO -->
-<audio id="audio" preload="auto"></audio>
+<audio id="audio" preload="auto" crossorigin="anonymous"></audio>
 
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────────
@@ -1448,40 +1376,54 @@ async function jsvGetStreamUrl(encryptedUrl) {
 }
 
 async function jsvSearch(query) {
-  // autocomplete.get → albums → webapi.get per album → collect songs
-  const ac = await jsvFetch(`__call=autocomplete.get&query=${encodeURIComponent(query)}`);
-  const albums = ac.albums?.data || [];
-  const tq = ac.topquery?.data || [];
-  const candidates = [...tq, ...albums].slice(0, 4);
-
-  const songs = [];
   const seen = new Set();
-  for (const item of candidates) {
-    if (songs.length >= 6) break;
+  const songs = [];
+
+  function addSongs(list) {
+    for (const s of (list || [])) {
+      if (s?.id && !seen.has(s.id)) { seen.add(s.id); songs.push(s); }
+    }
+  }
+
+  // Fix 1: direct song search — one call, returns songs immediately
+  const [direct, ac] = await Promise.all([
+    jsvFetch(`__call=search.getResults&p=1&q=${encodeURIComponent(query)}&n=20`).catch(() => null),
+    jsvFetch(`__call=autocomplete.get&query=${encodeURIComponent(query)}`).catch(() => null),
+  ]);
+
+  // Pull songs from direct search first
+  addSongs(direct?.results || direct?.songs || []);
+
+  // Also pull any songs the topquery/albums autocomplete surfaces
+  const tq = ac?.topquery?.data || [];
+  const albums = ac?.albums?.data || [];
+  const candidates = [...tq, ...albums].slice(0, 6);
+
+  // Fix 2: fetch all album/song candidates in parallel
+  await Promise.all(candidates.map(async item => {
     const token = (item.perma_url || '').split('/').filter(Boolean).pop();
     const type = item.type || 'album';
+    if (type === 'song' && item.id) {
+      addSongs([item]);
+      return;
+    }
     if (!token || type === 'artist') {
-      // use song_pids directly if available
       const pids = (item.more_info?.song_pids || '').split(',').map(p => p.trim()).filter(Boolean);
-      if (pids.length) {
-        try {
-          const d = await jsvFetch(`__call=song.getDetails&pids=${pids.slice(0,6).join(',')}`);
-          for (const s of (d.songs || [])) {
-            if (!seen.has(s.id)) { seen.add(s.id); songs.push(s); }
-          }
-        } catch(e) {}
-      }
-      continue;
+      if (!pids.length) return;
+      try {
+        const d = await jsvFetch(`__call=song.getDetails&pids=${pids.slice(0, 8).join(',')}`);
+        addSongs(d.songs || []);
+      } catch(e) {}
+      return;
     }
     try {
       const d = await jsvFetch(`__call=webapi.get&token=${token}&type=${type}`);
-      for (const s of (d.list || d.songs || [])) {
-        if (songs.length >= 6) break;
-        if (!seen.has(s.id)) { seen.add(s.id); songs.push(s); }
-      }
+      addSongs(d.list || d.songs || []);
     } catch(e) {}
-  }
-  return songs.slice(0, 6);
+  }));
+
+  // Fix 3: return up to 20 results
+  return songs.slice(0, 20);
 }
 
 async function jsvGetSongById(id) {
@@ -1510,6 +1452,7 @@ function jsvTrackToSong(track, audioUrl) {
     thumbnail: jsvImage(track.image),
     audioUrl,
     duration: parseInt(track.more_info?.duration || 0),
+    language: (track.more_info?.language || track.language || '').toLowerCase(),
   };
 }
 
@@ -1527,12 +1470,18 @@ let _sleepTimeout = null;
 
 // ─── CROSSFADE ENGINE ──────────────────────────────────────────────────
 const CROSSFADE_SECS = 5;
+const DJ_CROSSFADE_SECS = 8;
 const PRELOAD_SECS = 12; // start loading next track this many seconds before end
 let _wactx = null, _gainA = null, _gainB = null;
+let _eqA = null, _eqB = null; // low-shelf EQ for DJ bass-swap transitions
 let _audioNext = null;
 let _crossfadeActive = false;
 let _crossfadeBlobUrl = null;
 let _preloadDone = false; // true once _audioNext.src is set for the current next song
+
+let djMode = false;
+let _radioFilling = false;
+const _radioSeen = new Set(); // persists across calls so same songs never repeat
 
 // Pre-computed equal-power curves (cos/sin) — computed once at startup
 const _CURVE_STEPS = 512;
@@ -1550,10 +1499,14 @@ function _initCrossfade() {
     _wactx = new (window.AudioContext || window.webkitAudioContext)();
     _gainA = _wactx.createGain(); _gainA.gain.value = 1;
     _gainB = _wactx.createGain(); _gainB.gain.value = 0;
+    // Low-shelf EQ filters for DJ bass-swap — normally transparent (gain=0)
+    _eqA = _wactx.createBiquadFilter(); _eqA.type = 'lowshelf'; _eqA.frequency.value = 200; _eqA.gain.value = 0;
+    _eqB = _wactx.createBiquadFilter(); _eqB.type = 'lowshelf'; _eqB.frequency.value = 200; _eqB.gain.value = -24;
     _audioNext = new Audio();
     _audioNext.preload = 'auto';
-    _wactx.createMediaElementSource(audio).connect(_gainA).connect(_wactx.destination);
-    _wactx.createMediaElementSource(_audioNext).connect(_gainB).connect(_wactx.destination);
+    _audioNext.crossOrigin = 'anonymous';
+    _wactx.createMediaElementSource(audio).connect(_eqA).connect(_gainA).connect(_wactx.destination);
+    _wactx.createMediaElementSource(_audioNext).connect(_eqB).connect(_gainB).connect(_wactx.destination);
   } catch(e) { _wactx = null; }
 }
 
@@ -1572,7 +1525,14 @@ async function _preloadNext() {
     } else if (nextSong.audioUrl) {
       nextSrc = nextSong.audioUrl;
     } else {
-      return;
+      // No URL yet — fetch fresh so crossfade can preload it
+      if (!navigator.onLine) return;
+      try {
+        const track = await jsvGetSongById(nextSong.videoId);
+        const audioUrl = await jsvGetStreamUrl(track.more_info?.encrypted_media_url);
+        queue[0] = { ...nextSong, audioUrl }; // update queue entry so playSong gets the URL too
+        nextSrc = audioUrl;
+      } catch(e) { return; }
     }
   } catch(e) { return; }
 
@@ -1599,7 +1559,7 @@ async function _startCrossfadeWithNext() {
   _audioNext.play().catch(() => {});
 
   const remaining = Math.max(0.3, audio.duration - audio.currentTime);
-  const fadeDur = Math.min(CROSSFADE_SECS, remaining);
+  const fadeDur = Math.min(djMode ? DJ_CROSSFADE_SECS : CROSSFADE_SECS, remaining);
   const now = _wactx.currentTime;
 
   // True equal-power cosine/sine crossfade — perceived volume stays constant
@@ -1609,6 +1569,15 @@ async function _startCrossfadeWithNext() {
   _gainB.gain.setValueAtTime(_gainB.gain.value, now);
   _gainA.gain.setValueCurveAtTime(_fadeOutCurve, now, fadeDur);
   _gainB.gain.setValueCurveAtTime(_fadeInCurve,  now, fadeDur);
+
+  // DJ mode: bass-swap EQ transition (outgoing loses bass, incoming gains bass)
+  if (djMode && _eqA && _eqB) {
+    // cancelScheduledValues(0) wipes ALL events including any active ramp
+    _eqA.gain.cancelScheduledValues(0); _eqA.gain.setValueAtTime(0, now);
+    _eqB.gain.cancelScheduledValues(0); _eqB.gain.setValueAtTime(-24, now);
+    _eqA.gain.linearRampToValueAtTime(-24, now + fadeDur);
+    _eqB.gain.linearRampToValueAtTime(0,   now + fadeDur);
+  }
 
   // Mid-point: update song UI at the perceptual crossover (50% through fade)
   const midDelay = (fadeDur / 2) * 1000;
@@ -1632,7 +1601,10 @@ async function _startCrossfadeWithNext() {
     // Advance queue and update state (mirrors playSong logic, no audio setup)
     const next = queue.shift();
     renderQueue();
-    if (currentSong && !_skipHistory) songHistory.push(currentSong);
+    if (currentSong && !_skipHistory) {
+      songHistory.push(currentSong);
+      if (songHistory.length > 50) songHistory.shift();
+    }
     loopRemaining = loopMode;
     currentSong = next;
     // UI already updated at midpoint — just sync the rest
@@ -1661,8 +1633,18 @@ async function _startCrossfadeWithNext() {
     _gainA.gain.setValueAtTime(0, snapNow);
     _gainA.gain.linearRampToValueAtTime(1, snapNow + 0.03);
     audio.play().catch(() => {});
-    _audioNext.src = '';
+    _audioNext.removeAttribute('src'); _audioNext.load();
     _preloadDone = false;
+
+    // Reset EQ to neutral so next transition starts clean (instant, no ramp)
+    if (_eqA && _eqB) {
+      const r = _wactx.currentTime;
+      _eqA.gain.cancelScheduledValues(0); _eqA.gain.setValueAtTime(0,   r);
+      _eqB.gain.cancelScheduledValues(0); _eqB.gain.setValueAtTime(-24, r);
+    }
+
+    // Auto-radio: refill queue in DJ mode
+    _autoRadioFill();
 
     // Update save button state
     try {
@@ -1683,6 +1665,8 @@ function _cancelCrossfade() {
     const now = _wactx.currentTime;
     _gainA.gain.cancelScheduledValues(now); _gainA.gain.setValueAtTime(1, now);
     _gainB.gain.cancelScheduledValues(now); _gainB.gain.setValueAtTime(0, now);
+    if (_eqA) { _eqA.gain.cancelScheduledValues(0); _eqA.gain.setValueAtTime(0,   now); }
+    if (_eqB) { _eqB.gain.cancelScheduledValues(0); _eqB.gain.setValueAtTime(-24, now); }
   }
 }
 
@@ -1713,8 +1697,9 @@ audio.addEventListener('timeupdate', () => {
       if (!_preloadDone && !_crossfadeActive && remaining <= PRELOAD_SECS) {
         _preloadNext();
       }
-      // Crossfade trigger
-      if (!_crossfadeActive && remaining <= CROSSFADE_SECS) {
+      // Crossfade trigger — skip for songs shorter than the fade window
+      const _fadeSecs = djMode ? DJ_CROSSFADE_SECS : CROSSFADE_SECS;
+      if (!_crossfadeActive && remaining <= _fadeSecs && audio.duration > _fadeSecs) {
         _startCrossfadeWithNext();
       }
     }
@@ -1728,6 +1713,7 @@ function playNext() {
       : queue.shift();
     renderQueue();
     playSong(next);
+    _autoRadioFill();
   }
 }
 
@@ -1742,6 +1728,80 @@ function toggleCrossfade() {
   document.getElementById('fp-crossfade-btn').classList.toggle('fp-active', crossfadeOn);
   if (!crossfadeOn) _cancelCrossfade();
   toast(crossfadeOn ? 'Crossfade on' : 'Crossfade off');
+}
+
+function toggleDjMode() {
+  djMode = !djMode;
+  document.getElementById('fp-dj-btn').classList.toggle('fp-active', djMode);
+  if (djMode) {
+    // DJ mode forces crossfade on
+    if (!crossfadeOn) {
+      crossfadeOn = true;
+      document.getElementById('fp-crossfade-btn').classList.add('fp-active');
+    }
+    toast('DJ Mode on');
+    _autoRadioFill();
+  } else {
+    // Reset EQ to neutral when turning off
+    if (_wactx && _eqA && _eqB) {
+      const n = _wactx.currentTime;
+      _eqA.gain.cancelScheduledValues(0); _eqA.gain.setValueAtTime(0,   n);
+      _eqB.gain.cancelScheduledValues(0); _eqB.gain.setValueAtTime(-24, n);
+    }
+    _radioSeen.clear();
+    toast('DJ Mode off');
+  }
+}
+
+async function _autoRadioFill() {
+  if (!djMode || !currentSong || _radioFilling || !navigator.onLine) return;
+  if (queue.length >= 3) return;
+  _radioFilling = true;
+
+  // How many slots are open (top up to 3)
+  const needed = 3 - queue.length;
+
+  // Seed seen set with current song + history + everything already in queue
+  _radioSeen.add(String(currentSong.videoId));
+  songHistory.forEach(s => _radioSeen.add(String(s.videoId)));
+  queue.forEach(q => _radioSeen.add(String(q.videoId)));
+
+  try {
+    const firstArtist = (currentSong.artist || '').split(',')[0].trim();
+    const lang = currentSong.language || '';
+    const artistQuery = lang ? `${firstArtist} ${lang}` : firstArtist;
+    const titleQuery  = lang ? `${currentSong.title} ${lang}` : currentSong.title;
+
+    // Parallel: artist search + title/vibe search
+    const [byArtist, byTitle] = await Promise.all([
+      jsvFetch(`__call=search.getResults&p=1&q=${encodeURIComponent(artistQuery)}&n=10`).catch(() => null),
+      jsvFetch(`__call=search.getResults&p=1&q=${encodeURIComponent(titleQuery)}&n=10`).catch(() => null),
+    ]);
+
+    // Interleave so queue alternates artist and vibe songs
+    const ar = byArtist?.results || byArtist?.songs || [];
+    const tr = byTitle?.results  || byTitle?.songs  || [];
+    const merged = [];
+    for (let i = 0; i < Math.max(ar.length, tr.length); i++) {
+      if (ar[i]) merged.push(ar[i]);
+      if (tr[i]) merged.push(tr[i]);
+    }
+
+    let added = 0;
+    for (const s of merged) {
+      if (added >= needed) break;
+      if (!s?.id) continue;
+      const vid = String(s.id);
+      if (_radioSeen.has(vid)) continue;
+      _radioSeen.add(vid);
+      queue.push(jsvTrackToSong(s, null));
+      added++;
+    }
+    if (added) renderQueue();
+  } catch(e) {
+    console.error('[DJ] _autoRadioFill failed:', e);
+  }
+  _radioFilling = false;
 }
 
 function cycleSleepTimer() {
@@ -1817,6 +1877,7 @@ function cycleLoop() {
   const badge = document.getElementById('fp-loop-badge');
   if (loopMode === 0) {
     btn.classList.remove('fp-active');
+    badge.textContent = '';
   } else {
     btn.classList.add('fp-active');
     badge.textContent = loopMode;
@@ -1866,9 +1927,21 @@ audio.addEventListener('pause', () => {
   if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
 });
 
-audio.addEventListener('error', () => {
+audio.addEventListener('error', async () => {
   const err = audio.error;
   if (!err) return;
+  // Code 4 = MEDIA_ERR_SRC_NOT_SUPPORTED — usually an expired CDN URL.
+  // Try to refresh the stream URL before giving up.
+  if (err.code === 4 && currentSong?.videoId && navigator.onLine) {
+    try {
+      const track = await jsvGetSongById(currentSong.videoId);
+      const audioUrl = await jsvGetStreamUrl(track.more_info?.encrypted_media_url);
+      currentSong = { ...currentSong, audioUrl };
+      audio.src = audioUrl;
+      audio.play().catch(()=>{});
+      return;
+    } catch(e) { /* fall through to error toast */ }
+  }
   const msg = err.code === 2 ? 'Network error — check connection'
             : err.code === 3 ? 'Could not decode audio'
             : err.code === 4 ? 'Audio not available'
@@ -1969,7 +2042,10 @@ function updateFullPlayer(song) {
 
 async function playSong(song) {
   // song = { videoId, title, artist, thumbnail, audioUrl? }
-  if (currentSong && !_skipHistory) songHistory.push(currentSong);
+  if (currentSong && !_skipHistory) {
+    songHistory.push(currentSong);
+    if (songHistory.length > 50) songHistory.shift();
+  }
   _skipHistory = false;
   loopRemaining = loopMode;
   if (_sleepInterval) _cancelSleepTimer();
@@ -1997,7 +2073,6 @@ async function playSong(song) {
     audio.src = currentBlobUrl;
     audio.play().catch(()=>{});
     updateSaveBtn(true);
-    toast('Playing from offline cache');
   } else if (song.audioUrl) {
     audio.src = song.audioUrl;
     audio.play().catch(()=>{});
@@ -2005,8 +2080,21 @@ async function playSong(song) {
     // auto-cache in background
     cacheAudioBlob(song);
   } else {
-    toast('No audio source available');
-    return;
+    // No URL yet (queued from Recent/Library) — fetch fresh stream URL
+    if (!navigator.onLine) { toast('No internet & not saved offline'); return; }
+    toast('Loading…');
+    try {
+      const track = await jsvGetSongById(song.videoId);
+      const audioUrl = await jsvGetStreamUrl(track.more_info?.encrypted_media_url);
+      currentSong = { ...currentSong, audioUrl }; // keep global state in sync
+      audio.src = audioUrl;
+      audio.play().catch(()=>{});
+      updateSaveBtn(false);
+      cacheAudioBlob(currentSong);
+    } catch(e) {
+      toast('Could not load song');
+      return;
+    }
   }
 
   // Save to recent
@@ -2356,9 +2444,7 @@ async function doSearch(query) {
           <div class="song-title">${escHtml(title)}</div>
           <div class="song-meta">${escHtml(artist)}${duration ? ' · ' + formatDuration(duration) : ''}</div>
         </div>
-        <div class="song-action">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        </div>`;
+        `;
       div.onclick = () => playFromSearch(track);
       const qBtn = document.createElement('button');
       qBtn.className = 'q-add-btn';
@@ -2382,8 +2468,12 @@ async function playFromSearch(track) {
   }
   toast('Loading…');
   try {
-    const audioUrl = await jsvGetStreamUrl(track.more_info?.encrypted_media_url);
-    await playSong(jsvTrackToSong(track, audioUrl));
+    let fullTrack = track;
+    if (!track.more_info?.encrypted_media_url) {
+      fullTrack = await jsvGetSongById(trackId);
+    }
+    const audioUrl = await jsvGetStreamUrl(fullTrack.more_info?.encrypted_media_url);
+    await playSong(jsvTrackToSong(fullTrack, audioUrl));
   } catch (e) {
     toast('Could not load song');
     console.error(e);
@@ -2471,7 +2561,6 @@ function filterLibrary(val) {
   renderLibrary();
 }
 
-let _libOpenSection = null; // 'saved' | 'auto' | null
 
 async function renderLibrary() {
   const container = document.getElementById('library-list');
@@ -2481,7 +2570,7 @@ async function renderLibrary() {
   const auto  = all.filter(i => i.autoSaved && !i.savedAt && i.blob);
 
   const hash = all.map(i => i.videoId + (i.savedAt||'') + (i.autoSaved||'')).join(',')
-    + (currentSong?.videoId || '') + _libFilter + (_libOpenSection || '');
+    + (currentSong?.videoId || '') + _libFilter;
   if (hash === _libraryHash) return;
   _libraryHash = hash;
 
@@ -2495,115 +2584,70 @@ async function renderLibrary() {
 
   container.innerHTML = '';
 
-  function buildSongRows(songs, canDelete) {
-    const filter = _libFilter;
-    const visible = filter
-      ? songs.filter(i => (i.title||'').toLowerCase().includes(filter) || (i.artist||'').toLowerCase().includes(filter))
-      : songs;
-    if (!visible.length) {
-      const empty = document.createElement('div');
-      empty.className = 'lib-no-results';
-      empty.textContent = filter ? `No songs match "${filter}"` : 'No songs here';
-      return [empty];
-    }
-    return visible.map(item => {
-      const div = document.createElement('div');
-      div.className = 'song-row' + (currentSong?.videoId === item.videoId ? ' playing' : '');
-      div.dataset.videoid = item.videoId;
-      div.innerHTML = `
-        <img class="song-thumb" src="${item.thumbnail || ''}" onerror="this.style.display='none'" loading="lazy"/>
-        <div class="song-info">
-          <div class="song-title">${escHtml(item.title)}</div>
-          <div class="song-meta">${escHtml(item.artist || '')}</div>
-          <div class="cache-pill"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Offline</div>
-        </div>
-        ${canDelete ? `<button class="delete-btn" onclick="deleteSong('${item.videoId}', event)"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>` : ''}`;
-      div.onclick = (e) => { if (!e.target.closest('.delete-btn') && !e.target.closest('.q-add-btn')) playFromLibrary(item); };
-      const qBtn = document.createElement('button');
-      qBtn.className = 'q-add-btn';
-      qBtn.title = 'Add to queue';
-      qBtn.innerHTML = `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
-      qBtn.onclick = e => { e.stopPropagation(); addToQueue({ videoId: item.videoId, title: item.title, artist: item.artist, thumbnail: item.thumbnail }); };
-      if (canDelete) div.insertBefore(qBtn, div.querySelector('.delete-btn'));
-      else div.appendChild(qBtn);
-      return div;
-    });
-  }
-
-  function buildArtCollage(songs) {
-    const thumbs = [...new Set(songs.map(s => s.thumbnail).filter(Boolean))].slice(0, 4);
-    const placeholder = `<div class="lib-sec-art-placeholder"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>`;
-    const cells = [];
-    for (let i = 0; i < 4; i++) {
-      cells.push(thumbs[i]
-        ? `<img src="${thumbs[i]}" onerror="this.outerHTML='${placeholder.replace(/'/g,"\\'")}'" loading="lazy"/>`
-        : placeholder);
-    }
-    return cells.join('');
-  }
-
-  function buildSection({ id, title, subtitle, songs, canDelete }) {
-    const isOpen = _libOpenSection === id;
-    const sizeMB = songs.reduce((s, i) => s + (i.blobSize || 0), 0);
-    const meta = songs.length + ' song' + (songs.length !== 1 ? 's' : '')
-      + (sizeMB ? ' · ' + (sizeMB / (1024 * 1024)).toFixed(1) + ' MB' : '');
-
-    const card = document.createElement('div');
-    card.className = 'lib-sec-card';
-    card.innerHTML = `
-      <div class="lib-sec-art">${buildArtCollage(songs)}</div>
-      <div class="lib-sec-footer">
-        <div class="lib-sec-info">
-          <div class="lib-sec-title">${title}</div>
-          <div class="lib-sec-meta">${meta}</div>
-        </div>
-        <div class="lib-sec-play-circle" id="lib-sec-play-${id}">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        </div>
-      </div>`;
-
-    // Play circle taps → shuffle immediately, don't toggle expand
-    card.querySelector('.lib-sec-play-circle').onclick = (e) => {
-      e.stopPropagation();
-      playLibSection(songs);
-    };
-    // Card tap → toggle expanded song list
-    card.onclick = () => {
-      _libOpenSection = isOpen ? null : id;
-      _libraryHash = null;
-      renderLibrary();
-    };
-    container.appendChild(card);
-
-    if (isOpen) {
-      const wrap = document.createElement('div');
-      wrap.className = 'lib-sec-songs';
-
-      const bar = document.createElement('div');
-      bar.className = 'lib-sec-shuffle-bar';
-      bar.innerHTML = `
-        <span class="lib-sec-shuffle-bar-title">${songs.length} SONGS</span>
-        <button class="lib-sec-shuffle-btn">
-          <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-          Shuffle
-        </button>`;
-      bar.querySelector('.lib-sec-shuffle-btn').onclick = (e) => { e.stopPropagation(); playLibSection(songs); };
-      wrap.appendChild(bar);
-
-      buildSongRows(songs, canDelete).forEach(el => wrap.appendChild(el));
-      container.appendChild(wrap);
-    }
-  }
-
+  // Merge and sort: saved first (by savedAt desc), then auto (by cachedAt desc)
   saved.sort((a, b) => b.savedAt - a.savedAt);
   auto.sort((a, b) => (b.cachedAt || 0) - (a.cachedAt || 0));
+  const allSongs = [...saved, ...auto];
 
-  if (saved.length) {
-    buildSection({ id: 'saved', title: 'Saved Songs', songs: saved, canDelete: true });
+  // Apply filter
+  const filter = _libFilter;
+  const visible = filter
+    ? allSongs.filter(i => (i.title||'').toLowerCase().includes(filter) || (i.artist||'').toLowerCase().includes(filter))
+    : allSongs;
+
+  if (!visible.length) {
+    container.innerHTML = `<div class="lib-no-results">No songs match "${escHtml(filter)}"</div>`;
+    return;
   }
-  if (auto.length) {
-    buildSection({ id: 'auto', title: 'Auto Cached', songs: auto, canDelete: false });
-  }
+
+  // Actions bar: label + shuffle button
+  const actionsBar = document.createElement('div');
+  actionsBar.className = 'lib-actions-bar';
+  actionsBar.innerHTML = `
+    <span class="lib-section-label">${visible.length} song${visible.length !== 1 ? 's' : ''}</span>
+    <button class="lib-shuffle-btn" onclick="playLibSection(${JSON.stringify([])})">
+      <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+      Shuffle
+    </button>`;
+  actionsBar.querySelector('.lib-shuffle-btn').onclick = () => playLibSection(visible);
+  container.appendChild(actionsBar);
+
+  // Song list
+  const list = document.createElement('div');
+  list.className = 'lib-song-list';
+
+  visible.forEach(item => {
+    const isSaved = !!item.savedAt;
+    const div = document.createElement('div');
+    div.className = 'song-row' + (currentSong?.videoId === item.videoId ? ' playing' : '');
+    div.dataset.videoid = item.videoId;
+    div.innerHTML = `
+      <img class="song-thumb" src="${escHtml(item.thumbnail || '')}" onerror="this.style.display='none'" loading="lazy"/>
+      <div class="song-info">
+        <div class="song-title">${escHtml(item.title || 'Unknown')}</div>
+        <div class="song-meta">${escHtml(item.artist || '')}${!isSaved ? '<span class="lib-auto-badge">Auto</span>' : ''}</div>
+      </div>
+      ${isSaved ? `<button class="delete-btn" title="Remove from library"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>` : ''}`;
+
+    if (isSaved) {
+      div.querySelector('.delete-btn').onclick = e => deleteSong(item.videoId, e);
+    }
+    div.onclick = (e) => {
+      if (!e.target.closest('.delete-btn') && !e.target.closest('.q-add-btn')) playFromLibrary(item);
+    };
+
+    const qBtn = document.createElement('button');
+    qBtn.className = 'q-add-btn';
+    qBtn.title = 'Add to queue';
+    qBtn.innerHTML = `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+    qBtn.onclick = e => { e.stopPropagation(); addToQueue({ videoId: item.videoId, title: item.title, artist: item.artist, thumbnail: item.thumbnail }); };
+    if (isSaved) div.insertBefore(qBtn, div.querySelector('.delete-btn'));
+    else div.appendChild(qBtn);
+
+    list.appendChild(div);
+  });
+
+  container.appendChild(list);
 }
 
 function playLibSection(songs) {
@@ -2638,7 +2682,10 @@ async function deleteSong(videoId, e) {
   if (!item) return;
   // keep recent entry, just remove blob+savedAt
   await dbPut('songs', { ...item, blob: null, savedAt: null });
-  if (currentSong?.videoId === videoId) updateSaveBtn(false);
+  if (currentSong?.videoId === videoId) {
+    updateSaveBtn(false);
+    if (currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = null; }
+  }
   _libraryHash = null;
   renderLibrary();
   toast('Removed from library');
